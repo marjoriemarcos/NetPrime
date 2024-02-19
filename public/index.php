@@ -3,6 +3,8 @@
 
 // On commence par inclure le fichier autoload.php. Ce fichier se charge d'inclure toutes les classes téléchargées via composer.
 require __DIR__.'/../vendor/autoload.php';
+use Netprime\Controllers\CoreController;
+use Netprime\Controllers\MainController;
 
 
 // On utilise la classe AltoRouter pour gérer nos routes. 
@@ -23,22 +25,40 @@ $router->map(
     '/',  // url de la route (/ = home)
     // Tableau contenant le controller et la méthode liée à la page
     [    
-        'controller' => 'MainController',
+        'controller' => MainController::class,
         'method' => 'homeAction'
     ],
     'home'
 );
 
-
-// On crée une route pour la page de résultats de recherche
 $router->map(
     'GET',
     '/results',
     [
-        'controller' => 'MainController',
+        'controller' => MainController::class,
         'method' => 'searchAction'
     ],
     'search'
+);
+
+$router->map(
+    'GET',
+    '/movie/[i:id]',
+    [
+        'controller' => MainController::class,
+        'method' => 'movieAction'
+    ],
+    'movie'
+);
+
+$router->map(
+    'GET',
+    '/other/[i:id]',
+    [
+        'controller' => MainController::class,
+        'method' => 'movieActor'
+    ],
+    'other'
 );
 
 
@@ -47,27 +67,23 @@ $router->map(
 // Si la route actuelle n'existe pas, $match contient false
 $match = $router->match();
 
-// Décommenter la ligne suivante pour voir le contenu de $match
-// dump($match);
-
 
 // ---- DISPATCHER ----- 
 // On vérifie que la page demandée fait partie des routes existantes. Si $match ne contient pas false, on est sur une route existante
 if($match !== false) {
   
     // On récupère le nom du controller dans lequel est rangé notre méthode qui gère la page demandée
-    $controllerToUse = 'App\Controllers\\' . $match['target']['controller'];
+    $controllerToUse = $match['target']['controller'];
 
     // On récupère dans le tableau des routes le nom de la méthode à exécuter. 
     $methodToUse = $match['target']['method'];
-
 
     // On récupère les paramètres dynamiques de l'url (exemple : id)
     $params = $match['params'];
 
     // On instancie le controller dans lequel est rangé la méthode
     // Si $controllerToUse contient "MainController", ça revient à écrire "new MainController()"
-    $controller = new $controllerToUse();
+    $controller = new $controllerToUse($router);
 
     // On utilise la variable $methodToUse pour exécuter la méthode de controller dont le nom est stocké dedans.
     // Si  $methodToUse contient "homeAction", c'est comme si on écrivait "$controller->homeAction($params)"

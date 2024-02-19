@@ -1,7 +1,6 @@
 <?php
-namespace App\Utils;
-
-use PDO;
+namespace Netprime\Utils;
+use \PDO;
 
 // Retenir son utilisation  => Database::getPDO()
 // Design Pattern : Singleton

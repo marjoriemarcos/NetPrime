@@ -1,3 +1,12 @@
+<?php   
+if (isset($viewData['movieChoosen'])) {
+$backgroundChoosen = 'https://image.tmdb.org/t/p/original/' . $viewData['movieChoosen']->getBackground_url();
+} else {
+$backgroundChoosen = null;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,12 +19,12 @@
     <link rel="stylesheet" href="<?= $absoluteUrl ?>/css/fontawesome/css/solid.css">
     <link rel="stylesheet" href="<?= $absoluteUrl ?>/css/style.css">
 </head>
-<body class="<?= $viewName ?>" style="" >
+<body class="<?= $viewName ?>" style="background-image: var(--gradient), <?= ($backgroundChoosen !== null) ? 'url(' . $backgroundChoosen . ')' : 'url(' . $absoluteUrl . '/images/bg-home.jpg)' ?>">
     <header class="classic-header">
         <a href="<?= $router->generate('home') ?>">
             <p class="logo">NetPrime <span>+</span></p>
         </a>
-        <form class="searchbar" action="">
+        <form class="searchbar" action="<?= $router->generate('search') ?>">
             <label for="search">Rechercher un film</label>
             <div class="search-container">
                 <input placeholder="Exemple : Le voyage de Chihiro" type="text" name="search" id="search">
