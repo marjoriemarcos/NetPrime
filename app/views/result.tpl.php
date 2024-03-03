@@ -1,6 +1,6 @@
 <?php    
 $listFilm = $viewData['listFilm'];
-$idFilmChosen = $viewData['idFilmChosen'];
+$idFilmChosen = $viewData['idMoviesChosen'];
 
 ?>
 

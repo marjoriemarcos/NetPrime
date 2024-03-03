@@ -2,6 +2,11 @@
 
 namespace Netprime\Models;
 
+/***
+ * 
+ * Model CoreModel qui prend l'ID des models Movie et People
+ * 
+ */
 class CoreModels
 {
 

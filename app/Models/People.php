@@ -5,6 +5,10 @@ use  Netprime\Models\CoreModels;
 use Netprime\Utils\Database;
 use \PDO;
 
+/***
+ * 
+ * Model People de la base de donnée "People"
+ */
 class People extends CoreModels
 {
 
@@ -12,6 +16,13 @@ class People extends CoreModels
     private $picture_url;
 
 
+    /***
+     * 
+     * Methode qui va chercher un people dans la table people avec l'aide d'un id
+     * 
+     * @param title qui est rentré par user 
+     * @return un objet
+     */
     public function findPeopleById($id)
     {
         $pdo = Database::getPDO();
@@ -27,6 +38,14 @@ class People extends CoreModels
 		return $result;
     }
 
+
+    /***
+     * 
+     * Methode qui va chercher tous les people d'un movie
+     * 
+     * @param title qui est rentré par user 
+     * @return mixed
+     */
     public function findPeopleByMovie($id)
     {
         $pdo = Database::getPDO();
@@ -37,13 +56,18 @@ class People extends CoreModels
                 ON actor_id = people.id
                 INNER JOIN movies 
                 ON movie_id = movies.id
-                WHERE movies.id = ' . $id . '
+                WHERE movies.id = :id
                 ORDER BY CASE WHEN picture_url IS NULL THEN 1 ELSE 0 END, picture_url';
-		$pdoStatement = $pdo->query($sql);
-
-		$result = $pdoStatement->fetchAll(PDO::FETCH_CLASS, self::class);
-
-		return $result;
+        
+        $pdoStatement = $pdo->prepare($sql);
+        $pdoStatement->execute(['id' => $id]);
+        
+        if ($pdoStatement) {
+            $result = $pdoStatement->fetchAll(PDO::FETCH_CLASS, self::class);
+            return $result;
+        } else {
+            return $result = []; 
+        }
     }
 
     public function getName()

@@ -2,8 +2,6 @@
 $listFilmByActor = $viewData['listFilmByActor'];
 $actorChoosen = $viewData['actorChoosen'];
 
-
-
 ?>
 
 <h1 class="result-title">Les films de : <span><?= $actorChoosen->getName() ?></span></h1>

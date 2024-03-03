@@ -5,6 +5,12 @@ use  Netprime\Models\CoreModels;
 use Netprime\Utils\Database;
 use \PDO;
 
+
+/***
+ * 
+ * Model Movie de la base de donnée "Movie"
+ * 
+ */
 class Movie extends CoreModels
 {
     private $release_date;
@@ -16,16 +22,20 @@ class Movie extends CoreModels
     private $director_id;
     private $composer_id;
     
-    //créer une méthode searchByTitle dans le model 
-    //Cette méthode devra retourner un tableau d'objets Movie
-    // l'envoyer à la vue views/result.tpl.php qui s'occupera de l'afficher
 
-    public function searchByTitle($id) 
+    
+    /***
+     * 
+     * Methode qui va chercher un filme par un mot
+     * 
+     * @param title qui est rentré par user 
+     */
+    public function searchByTitle($title) 
     {
         $pdo = Database::getPDO();
         $sql = "SELECT movies.* 
                 FROM movies 
-                WHERE title LIKE '%" . $id . "%'";
+                WHERE title LIKE '%" . $title . "%'";
 		$pdoStatement = $pdo->query($sql);
 
         if ($pdoStatement) {
@@ -36,32 +46,50 @@ class Movie extends CoreModels
         }
     }
 
+
+    /***
+     * 
+     * Methode qui va chercher un filme par son ID
+     * 
+     * @param id qui est l'id du film choisi par l'user 
+     */
     public function searchById($id)
     {
         $pdo = Database::getPDO();
         $sql = 'SELECT movies.* 
                 FROM movies 
-                WHERE id = ' . $id;
-		$pdoStatement = $pdo->query($sql);
+                WHERE id = :id';
+        $pdoStatement = $pdo->prepare($sql);
+        $pdoStatement->bindParam(':id', $id, PDO::PARAM_INT);
+        $pdoStatement->execute();
         $result = $pdoStatement->fetchObject(self::class);
 
         return $result;
     }
 
-    public function findMovieByActor($id)
+
+    /***
+     * 
+     * Methode qui va chercher tous les films par un "movie"
+     * 
+     * @param id qui est l'id du film choisi par l'user 
+     */
+    public function findMovieByPeople($id)
     {
-        $pdo = Database::getPDO();
+    $pdo = Database::getPDO();
 
-		$sql = 'SELECT movies.* 
-                FROM movies 
-                INNER JOIN movie_actors 
-                ON movie_id = movies.id
-                INNER JOIN people 
-                ON actor_id = people.id
-                WHERE people.id = ' . $id;
-		
-        $pdoStatement = $pdo->query($sql);
+    $sql = 'SELECT movies.* 
+            FROM movies 
+            INNER JOIN movie_actors 
+            ON movie_id = movies.id
+            INNER JOIN people 
+            ON actor_id = people.id
+            WHERE people.id = :id';
 
+    $pdoStatement = $pdo->prepare($sql);
+    $pdoStatement->execute(['id' => $id]);
+
+        
         if ($pdoStatement) {
             $result = $pdoStatement->fetchAll(PDO::FETCH_CLASS, self::class);
             return $result;
@@ -70,6 +98,13 @@ class Movie extends CoreModels
         }
     }
 
+    /***
+     * 
+     * Methode qui va chercher les réalisateur d'un film
+     * 
+     * @param id qui est l'id de realisateur dans la table BBD "movie" 
+     * @return mixed
+     */
     public function moviesDirected($id)
     {
         $pdo = Database::getPDO();
@@ -78,9 +113,10 @@ class Movie extends CoreModels
                 FROM movies 
                 INNER JOIN people 
                 ON director_id = people.id
-                WHERE people.id = ' . $id;
+                WHERE people.id = :id';
 
-        $pdoStatement = $pdo->query($sql);
+        $pdoStatement = $pdo->prepare($sql);
+        $pdoStatement->execute(['id' => $id]);
 
         if ($pdoStatement) {
             $result = $pdoStatement->fetchAll(PDO::FETCH_CLASS, self::class);
@@ -90,6 +126,13 @@ class Movie extends CoreModels
         }
     }
 
+    /***
+     * 
+     * Methode qui va chercher les composeur d'un film
+     * 
+     * @param id qui est l'id de composer dans la table BBD "movie" 
+     * @return mixed
+     */
     public function moviesComposed($id)
     {
         $pdo = Database::getPDO();
@@ -98,10 +141,11 @@ class Movie extends CoreModels
             FROM movies 
             INNER JOIN people 
             ON composer_id = people.id
-            WHERE people.id = ' . $id;
+            WHERE people.id = :id';
 
-        $pdoStatement = $pdo->query($sql);
-
+        $pdoStatement = $pdo->prepare($sql);
+        $pdoStatement->execute(['id' => $id]);
+       
         if ($pdoStatement) {
             $result = $pdoStatement->fetchAll(PDO::FETCH_CLASS, self::class);
             return $result;

@@ -1,10 +1,6 @@
-<?php   
-if (isset($viewData['movieChoosen'])) {
-$backgroundChoosen = 'https://image.tmdb.org/t/p/original/' . $viewData['movieChoosen']->getBackground_url();
-} else {
-$backgroundChoosen = null;
-}
 
+<?php 
+$backgroundChoosen = $viewData['backgroundChoosen'];
 ?>
 
 <!DOCTYPE html>
@@ -14,12 +10,13 @@ $backgroundChoosen = null;
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NetPrime +</title>
-    <link rel="stylesheet" href="<?= $absoluteUrl ?>/css/reset.css">
-    <link rel="stylesheet" href="<?= $absoluteUrl ?>/css/fontawesome/css/fontawesome.css">
-    <link rel="stylesheet" href="<?= $absoluteUrl ?>/css/fontawesome/css/solid.css">
-    <link rel="stylesheet" href="<?= $absoluteUrl ?>/css/style.css">
+    <link rel="stylesheet" href="/assets/css/reset.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome/css/fontawesome.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome/css/solid.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
-<body class="<?= $viewName ?>" style="background-image: var(--gradient), <?= ($backgroundChoosen !== null) ? 'url(' . $backgroundChoosen . ')' : 'url(' . $absoluteUrl . '/images/bg-home.jpg)' ?>">
+
+<body class="<?= $viewName ?>" style="background-image: var(--gradient), url('<?= $backgroundChoosen ?>')">
     <header class="classic-header">
         <a href="<?= $router->generate('home') ?>">
             <p class="logo">NetPrime <span>+</span></p>
