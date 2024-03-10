@@ -22,8 +22,8 @@ PHP, MYSQL, CSS avec Bootsrap et HTML.
 
 Création des deux models afin de récupérer les données de la base de données.
 
-- `Movie` : qui permettra de récupérer les informations d'un film.
-- `People` : qui permettra de récupérer les informations d'une personne.
+- `Movie` : (extends de `CoreModel`) qui permettra de récupérer les informations d'un film.
+- `People` : (extends de `CoreModel`) qui permettra de récupérer les informations d'une personne.
 - `CoreModel` : qui est le parent de `People` et `Movie`.
 
 ## Controlleurs
